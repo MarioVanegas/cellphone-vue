@@ -1,7 +1,7 @@
 <template>
-  <v-container class="mt-16">
+  <v-container class="mt-20">
     <v-row>
-      <v-col cols="3">
+      <v-col cols="2">
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio
           nemo odit quos, enim quam debitis corporis, suscipit veniam tenetur
@@ -9,7 +9,8 @@
           velit corporis!
         </p>
       </v-col>
-      <v-col col="9">
+      <v-col col="10">         
+
         <Anuncio></Anuncio>
       </v-col>
     </v-row>
@@ -17,11 +18,24 @@
 </template>
 
 <script>
+import { db } from '../db'
 import Anuncio from "@/components/Anuncios.vue";
+
 export default {
   name: "Home",
   components: {
-    Anuncio,
+    Anuncio,    
+  },  
+  data() {
+        return {
+            tareas: []
+        }
   },
+  firebase : {
+        tareas: db.collection('tareas'),
+  },
+  
 };
+
+
 </script>

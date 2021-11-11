@@ -1,5 +1,12 @@
 <template>
   <div>
+    <h2>Productos</h2>
+    <ul>
+      <li v-for="(anuncio, key) in anuncios" :key="key">
+        {{ anuncio.descripcion }}
+      </li>
+    </ul>
+
     <v-card :loading="loading" class="my-2" max-width="374">
       <template slot="progress">
         <v-progress-linear
@@ -59,8 +66,13 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn color="deep-purple lighten-2" text @click="reserve">
-          Reserve
+        <v-btn color="blue-grey" class="ma-2 white--text">
+          Detalles
+          <v-icon right dark> mdi-plus</v-icon>
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn class="mx-2" fab dark color="indigo">
+          <v-icon dark> mdi-cart-plus </v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -68,16 +80,31 @@
 </template>
 
 <script>
+import { db } from "../db";
+
 export default {
   name: "Anuncios",
 
   data() {
-    return {};
+    return {
+      anuncios: [],
+      loading: false,
+      selection: 1,
+    };
+  },
+  firestore: {
+    anuncios: db.collection("anuncios"),
   },
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    reserve() {
+      this.loading = true;
+
+      setTimeout(() => (this.loading = false), 2000);
+    },
+  },
 };
 </script>
 
