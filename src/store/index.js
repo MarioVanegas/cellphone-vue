@@ -17,24 +17,23 @@ export default new Vuex.Store({
       "Oppo",
       "Otro",
     ],
-    so: [
-      { tipo: "Android", version: [4, 5, 6, 7, 8, 9, 10, 11] },
-      { tipo: "IOS", version: [3, 4, 5, 6, 7, 8, 10, 12, 13, 14] },
+    so: [{
+        tipo: "Android",
+        version: [4, 5, 6, 7, 8, 9, 10, 11]
+      },
+      {
+        tipo: "IOS",
+        version: [3, 4, 5, 6, 7, 8, 10, 12, 13, 14]
+      },
     ],
     ram: [1, 2, 3, 4, 6, 8, 12],
     rom: [16, 32, 64, 128, 256, 512],
-    search:"",
-    nuevo:false,
-
-
   },
   mutations: {
     nuevoAnuncio(state) {
       state.nuevo = !state.nuevo;
-    }
+    },
   },
-  actions: {
-  },
-  modules: {
-  }
-})
+  actions: {},
+  modules: {}
+});

@@ -14,9 +14,7 @@
           <v-toolbar-title>Nuevo anuncio</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text color="red" @click="dialog = false">
-              Cancelar
-            </v-btn>
+            <v-btn dark text color="red" @click="cancelar"> Cancelar </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-6">
@@ -213,8 +211,10 @@
                     <v-btn
                       color="red"
                       @click="eliminarImagen(i)"
-                      class="mr-auto mt-1"                        
-                      ><v-icon large dark> mdi-delete-forever-outline</v-icon></v-btn
+                      class="mr-auto mt-1"
+                      ><v-icon large dark>
+                        mdi-delete-forever-outline</v-icon
+                      ></v-btn
                     >
                   </v-carousel-item>
                 </v-carousel>
@@ -223,7 +223,7 @@
           </v-row>
           <v-row>
             <v-col class="d-flex justify-space-between">
-              <v-btn class="white--text" color="red" @click="dialog = false">
+              <v-btn class="white--text" color="red" @click="cancelar">
                 Cancelar
                 <v-icon> mdi-cancel</v-icon>
               </v-btn>
@@ -254,10 +254,12 @@ export default {
   data() {
     return {
       snackbar: false,
+      dialogLoading: false,
       dialog: false,
       anuncio: {
         titulo: null,
         descripcion: null,
+        imagenes: [],
         marca: null,
         ram: null,
         rom: null,
@@ -338,7 +340,7 @@ export default {
     agregarImagen() {
       if (this.imagen != null && this.$refs.formImg.validate()) {
         this.imagenes.push(this.imagen);
-        this.imagenesUrl.push(URL.createObjectURL(this.imagen));
+        this.imagenesUrl.push(URL.createObjectURL(this.imagen));       
         this.imagen = null;
         this.imagenesValid = true;
         this.$refs.formImg.reset();
@@ -377,7 +379,7 @@ export default {
       this.sistemaIndex = null;
       this.valid = true;
     },
-    async crearAnuncio() {
+   async crearAnuncio() {
       if (
         this.$refs.form.validate() &&
         this.imagenesValid &&
@@ -389,7 +391,7 @@ export default {
         var cantidadImg = this.imagenes.length;
         this.dialog = false;
         this.dialogLoading = true;
-        this.anuncio.fecha = new Date();
+        this.anuncio.fecha = new Date();      
         await db
           .collection("anuncios")
           .add(this.anuncio)
@@ -405,7 +407,9 @@ export default {
             .put(imagen)
             .then(() => {
               console.log("Imagen" + imagen.name + " subida");
-              if (contador == cantidadImg) {                
+              if (contador == cantidadImg) {
+                this.dialogLoading = false;
+                this.snackbar = true;
                 this.nuevoAnuncio();
               }
             })
@@ -416,10 +420,10 @@ export default {
         this.cancelar();
       } else if (this.imagenes.length == 0) {
         this.imagenesValid = true;
-        this.msgImg = "Selecciona una imagen.";
+        this.msgImg = "Debe seleccionar al menos una imagen";
       } else if (this.imagenes.length > 15) {
         this.imagenesValid = true;
-        this.msgImg = "15 imagenes max.";
+        this.msgImg = "Solo puede seleccionar hasta 15 imagenes";
       }
     },
   },

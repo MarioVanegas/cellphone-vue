@@ -1,10 +1,12 @@
 <template>
-    <div>
-  
+    <div>        
+        <h1>{{ anuncios.titulo}}</h1>
     </div>
 </template>
 
 <script>
+import { db } from "../db.js"
+
 export default {
     name: 'WorkspaceJsonAnuncio',
     components: {   
@@ -12,7 +14,8 @@ export default {
 
     data() {
         return {
-            
+        anuncios: {            
+        }  
         };
     },
 
@@ -20,9 +23,23 @@ export default {
         
     },
 
-    methods: {
-        
+   methods: {
+    async mostrarProducto() {
+      await db
+        .collection("anuncios")
+        .doc(this.$route.params.id)
+        .get()
+        .then((r) => {
+          this.anuncios = r.data();        
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
+  },
+  created(){
+      this.mostrarProducto()
+  }
 };
 </script>
 
