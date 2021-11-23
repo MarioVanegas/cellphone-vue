@@ -1,48 +1,235 @@
 <template>
-    <div>        
-        <h1>{{ anuncios.titulo}}</h1>
-    </div>
+  <div class="Anuncio">
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="5">
+          <v-card>
+            <v-carousel cycle :interval="5000">
+              <v-carousel-item
+                v-for="(url, index) in imagenes"
+                :src="url"
+                lazy-src="https://wallpaperaccess.com/full/1285990.jpg"
+                :key="index"
+              >
+              </v-carousel-item>
+            </v-carousel>
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="7">           
+          <v-card>
+            <v-card-title>
+              {{ anuncio.titulo }}
+            </v-card-title>
+            <v-card-subtitle>
+              <v-row align="center" class="mx-0 my-2">
+                <v-rating
+                  :value="Math.floor(Math.random() * (6 - 1) + 1)"
+                  color="amber"
+                  dense
+                  half-increments
+                  readonly
+                  size="14"
+                ></v-rating>
+                <div class="grey--text mx-4">
+                  ({{ Math.floor(Math.random() * 10000) }})
+                </div>
+                <div class="grey--text text-overline">
+                  <span class="mr-3">—</span>                  
+                </div>
+              </v-row>
+              <v-row
+                class="mx-0 my-2 text-caption font-weight-light d-flex aling-center"
+              >
+                <span>Vendedor :</span>
+                <v-chip small pill class="mx-1">
+                  <i class="far fa-user mr-2"></i>
+                  <span>{{ anuncio.vendedor }}</span>
+                </v-chip>
+                <span>Tel:</span>
+                <v-chip small pill class="mx-1">
+                  <i class="fas fa-phone-alt mr-2"></i>
+                  <span> {{ anuncio.telefono }}</span>
+                </v-chip>
+              </v-row>
+              <v-row class="mx-0 mt-2 text-caption font-weight-light">
+                Estado : {{ anuncio.estado ? "Nuevo" : "Usado" }}
+              </v-row>
+              <v-row class="mx-0  text-caption font-weight-light">
+                <div class="d-flex align-center">
+                  <i class="fas fa-map-marker-alt" style="color:#9E9E9E"></i>
+                  <span class="ml-1">Envios a El Salvador</span>
+                </div>
+              </v-row>
+            </v-card-subtitle>
+            <v-card-text>
+              <v-row class="mx-0  mt-5 d-flex aling-self-start">
+                <span class="text-h3">$ {{ anuncio.precio }}</span>
+               
+                >
+              </v-row>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn
+                block
+                color="deep-orange"
+                dark                
+              >
+                <span>Agregar al Carrito</span>
+                <i class="fas fa-cart-plus  fa-2x ml-1"></i>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card
+            :class="{ 'd-flex aling-center': $vuetify.breakpoint.mdAndUp }"
+          >
+            <v-card-text>
+              <p class="text-h5 black--text">Especificaciones:</p>
+              <v-simple-table>
+                <template v-slot:default>
+                  <tbody>
+                    <tr>
+                      <td width="10%" class="text-center">
+                        <i class="fas fa-info-circle fa-2x"></i>
+                      </td>
+                      <td>
+                        Estado:
+                      </td>
+                      <td>
+                        {{ anuncio.estado ? "Nuevo" : "Usado" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="10%" class="text-center">
+                        <i class="fas fa-mobile-alt fa-2x"></i>
+                      </td>
+                      <td>
+                        Marca:
+                      </td>
+                      <td>
+                        {{ anuncio.marca }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width="10%" class="text-center">
+                        <i
+                          :class="
+                            anuncio.sistema == 'Android'
+                              ? 'fab fa-android fa-2x'
+                              : 'fab fa-apple fa-2x'
+                          "
+                        ></i>
+                      </td>
+                      <td>
+                        Sistema Operativo:
+                      </td>
+                      <td>{{ anuncio.sistema }} {{ anuncio.version }}</td>
+                    </tr>
+                    <tr>
+                      <td width="10%" class="text-center">
+                        <i class="fas fa-sd-card fa-2x"></i>
+                      </td>
+                      <td>
+                        Almacenamiento:
+                      </td>
+                      <td>{{ anuncio.rom }} GB</td>
+                    </tr>
+                    <tr>
+                      <td width="10%" class="text-center">
+                        <i class="fas fa-memory fa-2x"></i>
+                      </td>
+                      <td>
+                        Memoria Ram:
+                      </td>
+                      <td>{{ anuncio.ram }} GB</td>
+                    </tr>
+                    <tr>
+                      <td width="10%" class="text-center">
+                        <i class="fas fa-mobile-alt fa-2x"></i>
+                      </td>
+                      <td>
+                        Pantalla:
+                      </td>
+                      <td>{{ anuncio.pantalla }} in</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card-text>
+            <v-divider vertical inset class="d-none d-md-inline"></v-divider>
+            <v-card-text>
+              <p class="text-h5">Descripcion:</p>
+              <p>{{ anuncio.descripcion }}</p>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import { db } from "../db.js"
+import { db, st } from "../db.js";
 
 export default {
-    name: 'WorkspaceJsonAnuncio',
-    components: {   
-  },  
+  name: "WorkspaceJsonAnuncio",
+  components: {},
 
-    data() {
-        return {
-        anuncios: {            
-        }  
-        };
-    },
+  data() {
+    return {
+      anuncio: {},
+      imagenes: [],    
+     
+    };
+  },
 
-    mounted() {
-        
-    },
+  mounted() {},
 
-   methods: {
-    async mostrarProducto() {
+  methods: {
+    async obtenerAnuncio() {
       await db
         .collection("anuncios")
         .doc(this.$route.params.id)
         .get()
         .then((r) => {
-          this.anuncios = r.data();        
+          this.anuncio = r.data();
         })
         .catch((e) => {
           console.log(e);
         });
+      await st
+        .ref()
+        .child(this.$route.params.id + "-img/")
+        .listAll()
+        .then(async (img) => {
+          img.items.forEach((imgPath) => {
+            st.ref()
+              .child(imgPath.fullPath)
+              .getDownloadURL()
+              .then((url) => {
+                this.imagenes.push(url);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          });
+          if (img.items.length == 0) {
+            this.imagenes.push(
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png"
+            );
+          }
+        })
+        .catch((eUrl) => {
+          console.log(eUrl);
+        });     
     },
   },
-  created(){
-      this.mostrarProducto()
-  }
+  created() {
+    this.obtenerAnuncio();
+  },
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
