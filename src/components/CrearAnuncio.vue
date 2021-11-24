@@ -200,7 +200,7 @@
               <v-card v-if="imagenesUrl.length > 0">
                 <v-card-subtitle>
                   Imagenes actuales
-                  {{ imagenesUrl.length }} / 15
+                  {{ imagenesUrl.length }} / 5
                 </v-card-subtitle>
                 <v-carousel hide-delimiters show-arrows height="25em">
                   <v-carousel-item
@@ -449,7 +449,7 @@ export default {
         this.msgImg = "Debe seleccionar al menos una imagen";
       } else if (this.imagenes.length > 15) {
         this.imagenesValid = true;
-        this.msgImg = "Solo puede seleccionar hasta 15 imagenes";
+        this.msgImg = "Solo puede seleccionar hasta 5 imagenes";
       }     
     },
   },

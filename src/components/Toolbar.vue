@@ -11,7 +11,7 @@
           tag="span"
           style="cursor: pointer; align-item: center; display: flex"
         >
-          <v-icon large color="green darken-2"> mdi-cellphone</v-icon>
+          <v-icon large color="red darken-2"> mdi-cellphone</v-icon>
           <span class="display-1"> CellPhone</span>
         </router-link>
       </div>
@@ -28,28 +28,39 @@
       >
       </v-text-field>
       <v-btn :ripple="false" icon @click="buscar"
-        ><v-icon large color="green darken-2"> mdi-magnify</v-icon></v-btn
+        ><v-icon large color="red darken-2"> mdi-magnify</v-icon></v-btn
       >
       <v-btn-toggle title group>
-        <v-btn :ripple="false" to="/" class="d-none d-md-flex">Inicio</v-btn>
+        <v-btn :ripple="false" to="/" class="d-none d-md-flex"
+          >Inicio<v-icon right>mdi-home</v-icon></v-btn
+        >
         <v-btn :ripple="false" to="/estadisticas" class="d-none d-md-flex"
-          >Estadisticas</v-btn
+          >Estadisticas<v-icon right>mdi-finance</v-icon></v-btn
         >
         <v-btn class="icon" :ripple="false" to="/carrito">
-          <v-badge color="red">
-            <v-icon large color="green darken-2"> mdi-cart-outline </v-icon>
+          <v-badge color="green" overlap class="mt-1">
+            <v-icon large color="red darken-2"> mdi-cart-outline </v-icon>
           </v-badge>
         </v-btn>
-        <v-btn icon @click="openModal">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
       </v-btn-toggle>
+      <v-btn
+        outlined
+        rounded
+        color="red"
+        :ripple="false"
+        class="d-none d-md-flex ma-2"
+        dark
+        @click="openModal"
+      >
+        Nuevo Anuncio
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
     </v-app-bar>
     <CrearAnuncios ref="modal" />
     <v-navigation-drawer v-model="drawer" fixed temporary dark>
       <div class="text-center mt-3">
         <router-link to="/" tag="span" style="cursor: pointer">
-          <v-icon large color="green darken-2"> mdi-cellphone</v-icon>
+          <v-icon large color="red darken-2"> mdi-cellphone</v-icon>
           <h1 class="display-1 white--text">CellPhone</h1>
         </router-link>
       </div>
@@ -57,21 +68,21 @@
         <v-list-item-group>
           <v-list-item to="/">
             <v-list-item-icon>
-              <v-icon large color="green darken-2"> mdi-home</v-icon>
+              <v-icon large color="red darken-2"> mdi-home</v-icon>
             </v-list-item-icon>
             <v-list-item-content>Inicio</v-list-item-content>
           </v-list-item>
           <v-list-item to="/estadisticas">
             <v-list-item-icon>
-              <v-icon large color="green darken-2"> mdi-poll</v-icon>
+              <v-icon large color="red darken-2"> mdi-poll</v-icon>
             </v-list-item-icon>
             <v-list-item-content>Estadisticas</v-list-item-content>
           </v-list-item>
-          <v-list-item to="/anuncio">
+          <v-list-item>
             <v-list-item-icon>
-              <v-icon large color="green darken-2"> mdi-plus</v-icon>
+              <v-icon large color="red darken-2"> mdi-plus</v-icon>
             </v-list-item-icon>
-            <v-list-item-content>Nuevo Anuncio</v-list-item-content>
+            <v-list-item-content link @click="openModal">Nuevo Anuncio</v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -98,9 +109,9 @@ export default {
   mounted() {},
 
   methods: {
-    buscar(){
-      this.$emit('busqueda', this.search)
-      },
+    buscar() {
+      this.$emit("busqueda", this.search);
+    },
 
     openModal() {
       this.$refs.modal.dialog = true;

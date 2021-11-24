@@ -15,9 +15,9 @@
             </v-carousel>
           </v-card>
         </v-col>
-        <v-col cols="12" md="7">           
+        <v-col cols="12" md="7">
           <v-card>
-            <v-card-title>
+            <v-card-title class="text-h3">
               {{ anuncio.titulo }}
             </v-card-title>
             <v-card-subtitle>
@@ -33,48 +33,48 @@
                 <div class="grey--text mx-4">
                   ({{ Math.floor(Math.random() * 10000) }})
                 </div>
-                
               </v-row>
               <v-row
-                class="mx-0 my-2 text-caption font-weight-light d-flex aling-center"
+                class="
+                  mx-0
+                  my-2
+                  text-caption
+                  font-weight-light
+                  d-flex
+                  aling-center
+                "
               >
                 <span>Vendedor:</span>
                 <v-chip small pill class="mx-1">
-                  <i class="far fa-user mr-2"></i>
+                  <v-icon>mdi-account</v-icon>
                   <span>{{ anuncio.vendedor }}</span>
                 </v-chip>
                 <span>Teléfono:</span>
                 <v-chip small pill class="mx-1">
-                  <i class="fas fa-phone-alt mr-2"></i>
+                  <v-icon>mdi-cellphone</v-icon>
                   <span> {{ anuncio.telefono }}</span>
                 </v-chip>
               </v-row>
               <v-row class="mx-0 mt-2 text-caption font-weight-light">
                 Estado: {{ anuncio.estado ? "Nuevo" : "Usado" }}
               </v-row>
-              <v-row class="mx-0  text-caption font-weight-light">
+              <br /><br />
+              <v-row class="mx-0 text-caption font-weight-light">
                 <div class="d-flex align-center">
-                  <i class="fas fa-map-marker-alt" style="color:#9E9E9E"></i>
+                  <v-icon style="color: #9e9e9e">mdi-shopping-outline</v-icon>
                   <span class="ml-1">Envios a El Salvador</span>
                 </div>
               </v-row>
             </v-card-subtitle>
             <v-card-text>
-              <v-row class="mx-0  mt-5 d-flex aling-self-start">
+              <v-row class="mx-0 mt-5 d-flex aling-self-start">
                 <span class="text-h3">$ {{ anuncio.precio }}</span>
-               
-                >
               </v-row>
             </v-card-text>
-
             <v-card-actions>
-              <v-btn
-                block
-                color="deep-orange"
-                dark                
-              >
+              <v-btn block color="red darken-4" dark>
                 <span>Agregar al Carrito</span>
-                <i class="fas fa-cart-plus  fa-2x ml-1"></i>
+                <v-icon>mdi-cart-plus</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -84,72 +84,54 @@
             :class="{ 'd-flex aling-center': $vuetify.breakpoint.mdAndUp }"
           >
             <v-card-text>
-              <p class="text-h5 black--text">Especificaciones:</p>
+              <p class="text-h5 black--text">Especificaciones técnicas:</p>
               <v-simple-table>
                 <template v-slot:default>
                   <tbody>
                     <tr>
                       <td width="10%" class="text-center">
-                        <i class="fas fa-info-circle fa-2x"></i>
+                        <v-icon>mdi-alert-decagram</v-icon>
                       </td>
-                      <td>
-                        Estado:
-                      </td>
+                      <td>Estado:</td>
                       <td>
                         {{ anuncio.estado ? "Nuevo" : "Usado" }}
                       </td>
                     </tr>
                     <tr>
                       <td width="10%" class="text-center">
-                        <i class="fas fa-mobile-alt fa-2x"></i>
+                        <v-icon>mdi-cellphone-cog</v-icon>
                       </td>
-                      <td>
-                        Marca:
-                      </td>
+                      <td>Marca:</td>
                       <td>
                         {{ anuncio.marca }}
                       </td>
                     </tr>
                     <tr>
                       <td width="10%" class="text-center">
-                        <i
-                          :class="
-                            anuncio.sistema == 'Android'
-                              ? 'fab fa-android fa-2x'
-                              : 'fab fa-apple fa-2x'
-                          "
-                        ></i>
+                        <v-icon>mdi-android</v-icon>
                       </td>
-                      <td>
-                        Sistema Operativo:
-                      </td>
+                      <td>Sistema Operativo:</td>
                       <td>{{ anuncio.sistema }} {{ anuncio.version }}</td>
                     </tr>
                     <tr>
                       <td width="10%" class="text-center">
-                        <i class="fas fa-sd-card fa-2x"></i>
+                        <v-icon>mdi-sd</v-icon>
                       </td>
-                      <td>
-                        Almacenamiento:
-                      </td>
+                      <td>Almacenamiento:</td>
                       <td>{{ anuncio.rom }} GB</td>
                     </tr>
                     <tr>
                       <td width="10%" class="text-center">
-                        <i class="fas fa-memory fa-2x"></i>
+                        <v-icon>mdi-memory</v-icon>
                       </td>
-                      <td>
-                        Memoria Ram:
-                      </td>
+                      <td>Memoria Ram:</td>
                       <td>{{ anuncio.ram }} GB</td>
                     </tr>
                     <tr>
                       <td width="10%" class="text-center">
-                        <i class="fas fa-mobile-alt fa-2x"></i>
+                        <v-icon>mdi-cellphone-screenshot</v-icon>
                       </td>
-                      <td>
-                        Pantalla:
-                      </td>
+                      <td>Pantalla:</td>
                       <td>{{ anuncio.pantalla }} in</td>
                     </tr>
                   </tbody>
@@ -178,8 +160,7 @@ export default {
   data() {
     return {
       anuncio: {},
-      imagenes: [],    
-     
+      imagenes: [],
     };
   },
 
@@ -221,7 +202,7 @@ export default {
         })
         .catch((eUrl) => {
           console.log(eUrl);
-        });     
+        });
     },
   },
   created() {
