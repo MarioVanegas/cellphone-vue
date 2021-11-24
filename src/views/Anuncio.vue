@@ -33,26 +33,24 @@
                 <div class="grey--text mx-4">
                   ({{ Math.floor(Math.random() * 10000) }})
                 </div>
-                <div class="grey--text text-overline">
-                  <span class="mr-3">—</span>                  
-                </div>
+                
               </v-row>
               <v-row
                 class="mx-0 my-2 text-caption font-weight-light d-flex aling-center"
               >
-                <span>Vendedor :</span>
+                <span>Vendedor:</span>
                 <v-chip small pill class="mx-1">
                   <i class="far fa-user mr-2"></i>
                   <span>{{ anuncio.vendedor }}</span>
                 </v-chip>
-                <span>Tel:</span>
+                <span>Teléfono:</span>
                 <v-chip small pill class="mx-1">
                   <i class="fas fa-phone-alt mr-2"></i>
                   <span> {{ anuncio.telefono }}</span>
                 </v-chip>
               </v-row>
               <v-row class="mx-0 mt-2 text-caption font-weight-light">
-                Estado : {{ anuncio.estado ? "Nuevo" : "Usado" }}
+                Estado: {{ anuncio.estado ? "Nuevo" : "Usado" }}
               </v-row>
               <v-row class="mx-0  text-caption font-weight-light">
                 <div class="d-flex align-center">

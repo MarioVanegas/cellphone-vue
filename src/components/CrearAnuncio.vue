@@ -227,7 +227,7 @@
                 Cancelar
                 <v-icon> mdi-cancel</v-icon>
               </v-btn>
-              <v-btn @click="crearAnuncio" color="green" dark class="=mr-auto">
+              <v-btn @click="crearAnuncio"  color="green" dark class="=mr-auto">
                 <span class="mr-1">Publicar</span>
                 <v-icon> mdi-upload</v-icon>
               </v-btn>
@@ -236,6 +236,31 @@
         </v-container>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogLoading" hide-overlay persistent width="300">
+      <v-card color="blue" dark>
+        <v-card-text>
+          Publicando Anuncio
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-snackbar v-model="snackbar" top right color="blue" timeout="-1">
+      Anuncio Publicado
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          icon
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          <v-icon> mdi-clock-time-eight-outline</v-icon>
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-row>
 </template>
 
@@ -408,9 +433,10 @@ export default {
             .then(() => {
               console.log("Imagen" + imagen.name + " subida");
               if (contador == cantidadImg) {
-                this.dialogLoading = false;
-                this.snackbar = true;
+                this.dialogLoading = false; 
+                this.snackbar = true;               
                 this.nuevoAnuncio();
+                window.location.href = "/"
               }
             })
             .catch((e) => {
@@ -424,7 +450,7 @@ export default {
       } else if (this.imagenes.length > 15) {
         this.imagenesValid = true;
         this.msgImg = "Solo puede seleccionar hasta 15 imagenes";
-      }
+      }     
     },
   },
   computed: {

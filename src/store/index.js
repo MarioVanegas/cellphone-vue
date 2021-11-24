@@ -5,17 +5,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    agrego: false,
     marcas: [
-      "Xiaomi",
-      "Huawei",
-      "Samsumg",
-      "Apple",
-      "Nokia",
-      "Google",
-      "LG",
-      "Motorola",
-      "Oppo",
-      "Otro",
+      "xiaomi",
+      "huawei",
+      "samsung",
+      "apple",
+      "nokia",
+      "google",
+      "lG",
+      "motorola",
+      "oppo",
+      "otro",
     ],
     so: [{
         tipo: "Android",
