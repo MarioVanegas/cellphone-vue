@@ -105,14 +105,17 @@
             </v-row>
             <!-- Fin Filtro Precio -->
           </v-card>
+
         </v-col>
         <!--Filtros y cards derecha -->
         <v-col cols="12" lg="10">
-          <!-- Filtro ordenar -->
+          <!-- Filtro ordenar -->              
           <v-data-iterator
             loading="true"
-            :items="anuncios"
+            :items="filtros"
+            item-key="id"
             :page="page"
+            :search="busqueda"
             :items-per-page.sync="itemsPerPage"
             :sort-by="sortBy.toLowerCase()"
             :sort-desc="sortDesc"
@@ -194,10 +197,10 @@
             <!-- Fin Filtro ordenar -->
             <v-divider></v-divider>
             <!-- crear cards -->
-            <template v-slot>
+            <template v-slot:default="props">              
               <v-row class="pt-5">
                 <v-col
-                  v-for="anuncio in buscarProductos"
+                  v-for="anuncio in props.items"
                   :key="anuncio.id"
                   cols="12"
                   sm="6"
@@ -207,7 +210,7 @@
                   class="px-2"
                 >
                   <v-card
-                    :loading="loading"
+                    :loading="loadingData"
                     class="mx-auto my-2"
                     max-width="374"
                   >
@@ -275,7 +278,7 @@
                         active-class="deep-purple accent-4 white--text"
                         column
                       >
-                        <v-chip small>{{ anuncio.rom }} GB</v-chip>                        
+                        <v-chip small>{{ anuncio.rom }} GB</v-chip>
                         <v-chip small>{{ anuncio.sistema }}</v-chip>
                         <v-chip small>{{ anuncio.marca }}</v-chip>
                         <v-chip small>{{
@@ -294,13 +297,7 @@
                         >
                       </router-link>
                       <v-spacer></v-spacer>
-                      <v-btn
-                        class="mr-4"
-                        fab
-                        dark
-                        small
-                        color="red"
-                      >
+                      <v-btn class="mr-4" fab dark small color="red">
                         <v-icon dark>mdi-cart-plus</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -338,15 +335,16 @@ moment.locale("es");
 export default {
   name: "Home",
   components: {},
-  props: ["busqueda"],
-  anuncios: Array,
+  props: {
+       busqueda: String
+  },
   data() {
     return {
       itemsPerPageArray: [2, 4, 8, 12],
       itemsPerPage: 8,
       sortDesc: false,
-      loadingData: true,
-      anuncios: [],
+      anuncios:[],
+      loadingData: true,     
       dialog: false,
       loading: false,
       selection: 1,
@@ -369,8 +367,7 @@ export default {
         "Sistema",
         "Telefono",
         "Titulo",
-        "Vendedor",
-        "Creado",
+        "Vendedor",        
       ],
       marca: [
         { texto: "Samsung", value: "samsung" },
@@ -400,64 +397,83 @@ export default {
   },
   methods: {
     async obtenerAnuncios() {
-      var anunciosLocal = [];
-      await db
-        .collection("anuncios")
-        .get()
-        .then((r) => {
-          var cantidadAnuncios = r.size;
-          var contador = 0;
-          r.forEach(async (anuncio) => {
-            let anuncioData = anuncio.data();
-            await st
-              .ref()
-              .child(anuncio.id + "-img/")
-              .list({ maxResults: 1 })
-              .then(async (img) => {
-                await st
-                  .ref()
-                  .child(anuncio.id + "-img/" + img.items[0].name)
-                  .getDownloadURL()
-                  .then((url) => {
-                    contador = contador + 1;
-                    anuncioData.imagen = url;
-                  })
-                  .catch((eUrl) => {
-                    console.log(eUrl);
-                  });
-              })
-              .catch((eImg) => {
-                contador = contador + 1;
-                anuncioData.imagen =
-                  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png";
-                console.log(eImg);
-              });
-            if (contador == cantidadAnuncios) {
-              this.loadingData = false;
-            }
-            anuncioData.id = anuncio.id;
-            anunciosLocal.push(anuncioData);
-          });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      //this.anuncios = anunciosLocal;
-      this.anuncios = anunciosLocal;
-      this.buscarProductos;
+      var fr = await db.collection("anuncios").get();
+      fr.forEach((anunciosData) => {
+        var anuncio = {
+          id: anunciosData.id,
+          descripcion: anunciosData.data().descripcion,
+          titulo: anunciosData.data().titulo,
+          marca: anunciosData.data().marca,
+          precio: anunciosData.data().precio,
+          imagen: null,
+          rom: anunciosData.data().rom,
+          ram: anunciosData.data().ram,
+          estado: anunciosData.data().estado,
+          sistema: anunciosData.data().sistema,
+          vendedor: anunciosData.data().vendedor,
+          telefono: anunciosData.data().telefono,
+          pantalla: anunciosData.data().pantalla,
+          version: anunciosData.data().version,
+          fecha: anunciosData.data().fecha,
+        };
+        this.anuncios.push(anuncio);
+      });
+      this.loadingData = false;
+      await this.traerImagenes();      
     },
-    filtro() {
+    async filtro() {
       this.estadoActivo = !this.estadoActivo;
+      this.anuncios = [];
+      this.loading = true;
+      this.loadingData = true;
       /* Estado = Nuevo */
       if (this.estadoActivo == false) {
-        this.$bind("anuncios", db.collection("anuncios"));
+        await this.obtenerAnuncios();
       } else {
-        this.$bind(
-          "anuncios",
-          db.collection("anuncios").where("estado", "==", true)
-        );
+        var fr = await db
+          .collection("anuncios")
+          .where("estado", "==", true)
+          .get();
+        fr.forEach((anunciosData) => {
+          var anuncio = {
+            id: anunciosData.id,
+            descripcion: anunciosData.data().descripcion,
+            titulo: anunciosData.data().titulo,
+            marca: anunciosData.data().marca,
+            precio: anunciosData.data().precio,
+            imagen: null,
+            rom: anunciosData.data().rom,
+            ram: anunciosData.data().ram,
+            estado: anunciosData.data().estado,
+            sistema: anunciosData.data().sistema,
+            vendedor: anunciosData.data().vendedor,
+            telefono: anunciosData.data().telefono,
+            pantalla: anunciosData.data().pantalla,
+            version: anunciosData.data().version,
+            fecha: anunciosData.data().fecha,
+          };
+          this.anuncios.push(anuncio);
+        });
+        this.loadingData = false;
+        await this.traerImagenes();
       }
+
       /* Fin Estado = Nuevo */
+    },
+    async traerImagenes() {
+      for (const anuncio of this.anuncios) {
+        var imagenes = await st
+          .ref()
+          .child(anuncio.id + "-img/")
+          .list({
+            maxResults: 1,
+          });
+        anuncio.imagen = await st
+          .ref()
+          .child(anuncio.id + "-img/" + imagenes.items[0].name)
+          .getDownloadURL();
+      }
+      this.loading = false;
     },
     antiguedad(segundos) {
       return moment(segundos, "X").fromNow();
@@ -466,12 +482,13 @@ export default {
       this.itemsPerPage = number;
     },
   },
-  created() {
-    this.obtenerAnuncios();
+  async created() {
+    await this.obtenerAnuncios();
   },
   computed: {
-    filtros: function () {
-      return this.anuncios.filter(function (filtro) {
+    filtros: function () { 
+       // var anunciosFiltrar = this.anuncios;     
+        return this.anuncios.filter(function (filtro) {
         if (
           this.marcaSeleccion.length > 0 ||
           this.pantallaSeleccion.length > 0 ||
@@ -530,7 +547,8 @@ export default {
               (filtro.precio <= this.range[1]))
           );
         }
-      }, this);
+      }, this); 
+        
     },
     paginarProductos: function () {
       let copia = this.filtros.slice();
@@ -574,17 +592,9 @@ export default {
         return Math.ceil(this.cantidadmax / this.itemsPerPage);
       }
     },
-
     ...mapState(["agrego"]),
-
     numberOfPages() {
       return Math.ceil(this.anuncios.length / this.itemsPerPage);
-    },
-  },
-  watch: {
-    nuevo: function () {
-      this.loadingData = true;
-      this.obtenerAnuncios();
     },
   },
 };

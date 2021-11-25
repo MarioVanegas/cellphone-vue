@@ -17,7 +17,7 @@
       </div>
       <v-text-field
         v-model="search"
-        @keyup.capture="buscar"
+        @keyup.enter="buscar"
         placeholder="Buscar"
         hide-details
         outlined
@@ -111,6 +111,8 @@ export default {
   methods: {
     buscar() {
       this.$emit("busqueda", this.search);
+      if (this.$route.path != "/")
+        this.$router.push("/")
     },
 
     openModal() {
