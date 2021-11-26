@@ -4,6 +4,7 @@
       <v-app-bar-nav-icon
         @click="drawer = true"
         class="d-flex d-md-none"
+        color="red darken-2"
       ></v-app-bar-nav-icon>
       <div class="hidden-sm-and-down ml-5 mr-4">
         <router-link

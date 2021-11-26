@@ -32,8 +32,8 @@
           </v-btn>
         </v-card-text>
         <v-card-text class="white--text pt-0">
-          Desarrollado por:
-          <strong> Mario Edgardo Vanegas Cardoza VC17018 </strong>
+          <strong>Desarrollado por:</strong>
+          Mario Edgardo Vanegas Cardoza <strong>Carnet:</strong> VC17018 
         </v-card-text>
         <v-card-text class="white--text pt-0">
           Fundamentos de la programación en internet 2021 Universidad de El

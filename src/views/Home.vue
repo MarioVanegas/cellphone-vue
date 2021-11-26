@@ -76,7 +76,7 @@
               dense
             ></v-range-slider>
             <v-row class="pa-2" dense>
-              <v-col cols="12" sm="5">
+              <v-col cols="12">
                 <v-text-field
                   :value="range[0]"
                   label="Min"
@@ -86,11 +86,8 @@
                   dense
                   @change="$set(range, 0, $event)"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="2">
-                <p class="pt-2 text-center">a</p>
-              </v-col>
-              <v-col cols="12" sm="5">
+              </v-col>              
+              <v-col cols="12">
                 <v-text-field
                   :value="range[1]"
                   label="Max"
@@ -209,7 +206,7 @@
                   dense
                 ></v-range-slider>
                 <v-row class="pa-2" dense>
-                  <v-col cols="12" sm="5">
+                  <v-col cols="12" sm="6">
                     <v-text-field
                       :value="range[0]"
                       label="Min"
@@ -219,11 +216,8 @@
                       dense
                       @change="$set(range, 0, $event)"
                     ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="2">
-                    <p class="pt-2 text-center">a</p>
-                  </v-col>
-                  <v-col cols="12" sm="5">
+                  </v-col>                  
+                  <v-col cols="12" sm="6">
                     <v-text-field
                       :value="range[1]"
                       label="Max"
@@ -420,8 +414,7 @@
                         active-class="deep-purple accent-4 white--text"
                         column
                       >
-                        <v-chip small>{{ anuncio.rom }} GB</v-chip>
-                        <v-chip small>{{ anuncio.sistema }}</v-chip>
+                        <v-chip small>{{ anuncio.rom }} GB</v-chip>                        
                         <v-chip small>{{ anuncio.marca }}</v-chip>
                         <v-chip small>{{
                           anuncio.estado ? "Nuevo" : "Usado"
