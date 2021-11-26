@@ -1,5 +1,22 @@
 <template>
-  <v-row justify="center">
+  <div>
+    <v-btn
+      color="red darken-1"
+      class="d-none d-sm-block"
+      @click="dialog = true"
+      rounded
+      outlined
+      >Nuevo Anuncio</v-btn
+    >
+    <v-btn
+      color="red darken-4"
+      class="d-sm-none"
+      fab
+      small
+      @click="dialog = true"
+    >
+      <v-icon>mdi-plus-thick</v-icon>
+    </v-btn>
     <v-dialog
       v-model="dialog"
       fullscreen
@@ -8,13 +25,15 @@
     >
       <v-card>
         <v-toolbar dark color="dark" class="px-10">
-          <v-btn icon dark @click="dialog = false">
+          <v-btn icon dark @click="cancelar">
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Nuevo anuncio</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text color="red" @click="cancelar"> Cancelar </v-btn>
+            <v-btn dark text color="red" @click="resetModal"
+              ><v-icon large class="px-1">mdi-reload</v-icon> Limpiar
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-6">
@@ -163,7 +182,7 @@
                       :translations="traducciones"
                       fetch-country
                       @update="obtenerTelefono"
-                      valid-color="#9E9E9E"
+                      valid-color="#03a33b"
                       error-color="#F44336"
                       size="lg"
                       :error="!telValid"
@@ -222,12 +241,18 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col class="d-flex justify-space-between">
+            <v-col class="d-flex">
+              <v-spacer></v-spacer>
               <v-btn class="white--text" color="red" @click="cancelar">
                 Cancelar
                 <v-icon> mdi-cancel</v-icon>
               </v-btn>
-              <v-btn @click="crearAnuncio"  color="green" dark class="=mr-auto">
+              <v-btn
+                @click="crearAnuncio"
+                color="green"
+                dark
+                class="=mr-auto ml-4"
+              >
                 <span class="mr-1">Publicar</span>
                 <v-icon> mdi-upload</v-icon>
               </v-btn>
@@ -251,17 +276,12 @@
     <v-snackbar v-model="snackbar" top right color="blue" timeout="-1">
       Anuncio Publicado
       <template v-slot:action="{ attrs }">
-        <v-btn
-          color="white"
-          icon
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
-          <v-icon> mdi-clock-time-eight-outline</v-icon>
+        <v-btn color="white" icon v-bind="attrs" @click="snackbar = false">
+          <v-icon> mdi-close</v-icon>
         </v-btn>
       </template>
     </v-snackbar>
-  </v-row>
+  </div>
 </template>
 
 <script>
@@ -284,7 +304,6 @@ export default {
       anuncio: {
         titulo: null,
         descripcion: null,
-        imagenes: [],
         marca: null,
         ram: null,
         rom: null,
@@ -310,26 +329,25 @@ export default {
       imagen: null,
       imagenesValid: false,
       msgImg: null,
-      e1: 1,
       sistemaIndex: null,
       valid: null,
       tituloRules: [
         (v) => !!v || "El titulo es requerido",
         (v) =>
           (v && v.length <= 100) ||
-          "El titulo debe ser de menos de 100 caracteres",
+          "El titulo debe ser de menos de 70 caracteres",
       ],
       descripcionRules: [
-        (v) => !!v || "La descripcion es requerida",
+        (v) => !!v || "Descripcion requerida",
         (v) =>
-          (v && v.length <= 1000) ||
-          "La descripcion debe ser de menos de 1000 caracteres",
+          (v && v.length <= 500) ||
+          "La descripcion debe ser de menos de 500 caracteres",
       ],
       marcaRules: [(v) => !!v || "La marca es requerida"],
       ramRules: [(v) => !!v || "La RAM es requerida"],
       romRules: [(v) => !!v || "La ROM es requerida"],
       pantallaRules: [(v) => !!v || "El tamaño de la pantalla es requerido"],
-      sistemaRules: [(v) => !!v || "El sistema perativo es requerido"],
+      sistemaRules: [(v) => !!v || "El SO es requerido"],
       versionRules: [
         (v) => !!v || "La version del sistema operativo es requerida",
       ],
@@ -342,7 +360,7 @@ export default {
         (value) =>
           !value ||
           value.size < 10000000 ||
-          "La imagen debe ser de 10 MB o menos!",
+          "La imagen debe ser de 10 MB o menos",
       ],
     };
   },
@@ -365,7 +383,7 @@ export default {
     agregarImagen() {
       if (this.imagen != null && this.$refs.formImg.validate()) {
         this.imagenes.push(this.imagen);
-        this.imagenesUrl.push(URL.createObjectURL(this.imagen));       
+        this.imagenesUrl.push(URL.createObjectURL(this.imagen));
         this.imagen = null;
         this.imagenesValid = true;
         this.$refs.formImg.reset();
@@ -377,7 +395,35 @@ export default {
     },
     cancelar() {
       this.$refs.form.resetValidation();
+      this.anuncio = {
+        titulo: null,
+        descripcion: null,
+        marca: null,
+        ram: null,
+        rom: null,
+        pantalla: null,
+        sistema: null,
+        version: null,
+        estado: false,
+        precio: null,
+        vendedor: null,
+        telefono: null,
+        fecha: null,
+      };
+      this.tel = null;
+      this.telValid = false;
+      this.imagenes = [];
+      this.imagenesUrl = [];
+      this.imagen = null;
+      this.imagenesValid = false;
+      this.msgImg = null;
+      this.e1 = 1;
+      this.sistemaIndex = null;
+      this.valid = true;
       this.dialog = false;
+    },
+    resetModal() {
+      this.$refs.form.resetValidation();
       this.anuncio = {
         titulo: null,
         descripcion: null,
@@ -404,19 +450,19 @@ export default {
       this.sistemaIndex = null;
       this.valid = true;
     },
-   async crearAnuncio() {
+    async crearAnuncio() {
       if (
         this.$refs.form.validate() &&
         this.imagenesValid &&
         this.imagenes.length > 0 &&
-        this.imagenes.length <= 15
+        this.imagenes.length <= 5
       ) {
         var anuncioId = null;
         var contador = 0;
         var cantidadImg = this.imagenes.length;
         this.dialog = false;
         this.dialogLoading = true;
-        this.anuncio.fecha = new Date();      
+        this.anuncio.fecha = new Date();
         await db
           .collection("anuncios")
           .add(this.anuncio)
@@ -433,24 +479,24 @@ export default {
             .then(() => {
               console.log("Imagen" + imagen.name + " subida");
               if (contador == cantidadImg) {
-                this.dialogLoading = false; 
-                this.snackbar = true;               
+                this.dialogLoading = false;
+                this.snackbar = true;
                 this.nuevoAnuncio();
-                window.location.href = "/"
+                console.log(this.nuevoAnuncio)                
               }
             })
             .catch((e) => {
               console.log(e);
             });
         });
-        this.cancelar();
+        this.cancelar();        
       } else if (this.imagenes.length == 0) {
         this.imagenesValid = true;
         this.msgImg = "Debe seleccionar al menos una imagen";
       } else if (this.imagenes.length > 15) {
         this.imagenesValid = true;
         this.msgImg = "Solo puede seleccionar hasta 5 imagenes";
-      }     
+      }
     },
   },
   computed: {

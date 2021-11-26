@@ -2,6 +2,14 @@
   <v-app>
     <Toolbar @busqueda="nuevaCadena = $event"></Toolbar>
     <v-main>
+      <v-snackbar v-model="storeSnackbar" top right color="red darken-4" timeout="-1">
+        Producto agregado a su carrito.
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" icon v-bind="attrs" @click="setSnackbar">
+            <v-icon right>mdi-close</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
       <router-view :busqueda="nuevaCadena" />
     </v-main>
     <v-footer dark padless>
@@ -42,6 +50,7 @@
 
 <script>
 import Toolbar from "@/components/Toolbar.vue";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "App",
@@ -79,5 +88,11 @@ export default {
       },
     ],
   }),
+  methods: {
+    ...mapMutations(["setSnackbar"]),
+  },
+  computed: {
+    ...mapState(["storeSnackbar"]),
+  },
  };
 </script>

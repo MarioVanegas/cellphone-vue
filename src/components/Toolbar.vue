@@ -38,25 +38,18 @@
           >Estadisticas<v-icon right>mdi-finance</v-icon></v-btn
         >
         <v-btn class="icon" :ripple="false" to="/carrito">
-          <v-badge color="green" overlap class="mt-1">
+          <v-badge
+            color="green"
+            overlap
+            class="mt-1"
+            :content="cantidad == 0 ? '0' : cantidad"
+          >
             <v-icon large color="red darken-2"> mdi-cart-outline </v-icon>
           </v-badge>
         </v-btn>
       </v-btn-toggle>
-      <v-btn
-        outlined
-        rounded
-        color="red"
-        :ripple="false"
-        class="d-none d-md-flex ma-2"
-        dark
-        @click="openModal"
-      >
-        Nuevo Anuncio
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      <CrearAnuncios class="ml-2" />
     </v-app-bar>
-    <CrearAnuncios ref="modal" />
     <v-navigation-drawer v-model="drawer" fixed temporary dark>
       <div class="text-center mt-3">
         <router-link to="/" tag="span" style="cursor: pointer">
@@ -78,12 +71,6 @@
             </v-list-item-icon>
             <v-list-item-content>Estadisticas</v-list-item-content>
           </v-list-item>
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon large color="red darken-2"> mdi-plus</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content link @click="openModal">Nuevo Anuncio</v-list-item-content>
-          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -92,6 +79,7 @@
 
 <script>
 import CrearAnuncios from "@/components/CrearAnuncio.vue";
+import { mapState } from "vuex";
 export default {
   name: "WorkspaceJsonToolbar",
   components: {
@@ -111,13 +99,11 @@ export default {
   methods: {
     buscar() {
       this.$emit("busqueda", this.search);
-      if (this.$route.path != "/")
-        this.$router.push("/")
+      if (this.$route.path != "/") this.$router.push("/");
     },
-
-    openModal() {
-      this.$refs.modal.dialog = true;
-    },
+  },
+  computed: {
+    ...mapState(["cantidad", "storeSnackbar"]),
   },
 };
 </script>

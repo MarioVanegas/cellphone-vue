@@ -8,12 +8,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import( /* webpackChunkName: "home" */ '../views/Home.vue')
-  },
-  {
-    path: '/about',
-    name: 'About',
-    component: () => import( /* webpackChunkName: "about" */ '../views/About.vue')
-  },
+  },  
   {
     path: '/anuncio/:id',
     name: 'Anuncio',
@@ -30,7 +25,7 @@ const routes = [
     component: () => import( /* webpackChunkName: "estadisticas" */ '../views/Estadisticas.vue')
   },
   {
-    path: '/error404',
+    path: '*',
     name: 'Error404',
     component: () => import( /* webpackChunkName: "error404" */ '../views/Error404.vue')
   }

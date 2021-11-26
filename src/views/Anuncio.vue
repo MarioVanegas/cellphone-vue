@@ -72,8 +72,19 @@
               </v-row>
             </v-card-text>
             <v-card-actions>
-              <v-btn block color="red darken-4" dark>
-                <span>Agregar al Carrito</span>
+              <v-btn
+                block
+                color="red darken-4"
+                dark
+                @click="
+                  agregarAlCarrito2({
+                    id: $route.params.id,
+                    data: anuncio,
+                    url: imagenes[0],
+                  })
+                "
+              >
+                <span>Agregar</span>
                 <v-icon>mdi-cart-plus</v-icon>
               </v-btn>
             </v-card-actions>
@@ -152,6 +163,7 @@
 
 <script>
 import { db, st } from "../db.js";
+import { mapMutations } from "vuex";
 
 export default {
   name: "WorkspaceJsonAnuncio",
@@ -167,6 +179,7 @@ export default {
   mounted() {},
 
   methods: {
+    ...mapMutations(["agregarAlCarrito2"]),
     async obtenerAnuncio() {
       await db
         .collection("anuncios")

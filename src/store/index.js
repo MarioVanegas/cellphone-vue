@@ -5,7 +5,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    agrego: false,
     marcas: [
       "xiaomi",
       "huawei",
@@ -29,10 +28,92 @@ export default new Vuex.Store({
     ],
     ram: [1, 2, 3, 4, 6, 8, 12],
     rom: [16, 32, 64, 128, 256, 512],
+    nuevo: false,
+    cantidad: 0,
+    carrito: [],
+    storeSnackbar: false,
   },
   mutations: {
+    setSnackbar(state) {
+      state.storeSnackbar = false;
+    },
     nuevoAnuncio(state) {
       state.nuevo = !state.nuevo;
+    },
+    agregarAlCarrito1(state, anuncio) {
+      if (state.carrito.length > 0) {
+        if (state.carrito.some((i) => i.id == anuncio.id)) {
+          let index = state.carrito.map((i) => i.id).indexOf(anuncio.id);
+          state.carrito[index].cantidad = state.carrito[index].cantidad + 1;
+          state.carrito[index].subTotal = parseFloat(
+            Math.round(
+              state.carrito[index].cantidad * state.carrito[index].precio * 100
+            ) / 100
+          ).toFixed(2);
+        } else {
+          anuncio.cantidad = 1;
+          anuncio.subTotal = parseFloat(
+            Math.round(anuncio.cantidad * anuncio.precio * 100) / 100
+          ).toFixed(2);
+          state.carrito.push(anuncio);
+        }
+      } else {
+        anuncio.cantidad = 1;
+        anuncio.subTotal = parseFloat(
+          Math.round(anuncio.cantidad * anuncio.precio * 100) / 100
+        ).toFixed(2);
+        state.carrito.push(anuncio);
+      }
+      state.storeSnackbar = true;
+      this.commit("cantidadDeArticulos");
+      console.log(state.carrito);
+    },
+    agregarAlCarrito2(state, anuncio) {
+      var anuncioLocal = anuncio.data;
+      anuncioLocal.imagen = anuncio.url;
+      anuncioLocal.id = anuncio.id;
+      console.log(anuncio.id);
+      this.commit("agregarAlCarrito1", anuncioLocal);
+      this.commit("cantidadDeArticulos");
+    },
+    agregarCantidad(state, id) {
+      var carritoLocal = state.carrito;
+      carritoLocal.forEach((articulo) => {
+        if (articulo.id == id) {
+          articulo.cantidad = articulo.cantidad + 1;
+          articulo.subTotal = parseFloat(
+            Math.round(articulo.cantidad * articulo.precio * 100) / 100
+          ).toFixed(2);
+        }
+      });
+      state.carrito = carritoLocal.slice();
+      this.commit("cantidadDeArticulos");
+    },
+    quitarCantidad(state, id) {
+      var carritoLocal = state.carrito;
+      carritoLocal.forEach((articulo) => {
+        if (articulo.id == id) {
+          articulo.cantidad = articulo.cantidad - 1;
+          articulo.subTotal = parseFloat(
+            Math.round(articulo.cantidad * articulo.precio * 100) / 100
+          ).toFixed(2);
+        }
+      });
+      state.carrito = carritoLocal.slice();
+      console.log(state.carrito);
+      this.commit("cantidadDeArticulos");
+    },
+    quitarArticulo(state, index) {
+      state.carrito.splice(index, 1);
+      this.commit("cantidadDeArticulos");
+    },
+    cantidadDeArticulos(state) {
+      var cantidad = 0;
+      console.log("cantidad");
+      state.carrito.forEach((c) => {
+        cantidad = Number(c.cantidad) + Number(cantidad);
+      });
+      state.cantidad = cantidad;
     },
   },
   actions: {},

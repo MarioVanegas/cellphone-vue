@@ -11,17 +11,15 @@
             <v-container class="pt-0" fluid>
               <v-list>
                 <v-list-item v-for="item in marca" :key="item.texto">
-                  <v-list-item-content class="margen">
-                    <v-list-item-title class="pl-2 pb-2">
-                      <v-checkbox
-                        v-model="marcaSeleccion"
-                        :label="`${item.texto}`"
-                        :value="item.value"
-                        hide-details
-                        dense
-                      ></v-checkbox>
-                    </v-list-item-title>
-                  </v-list-item-content>
+                  <v-list-item-title class="pl-0 pb-0">
+                    <v-checkbox
+                      v-model="marcaSeleccion"
+                      :label="`${item.texto}`"
+                      :value="item.value"
+                      hide-details
+                      dense
+                    ></v-checkbox>
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-container>
@@ -32,17 +30,15 @@
             <v-container class="pt-0" fluid>
               <v-list>
                 <v-list-item v-for="item in sistema" :key="item.texto">
-                  <v-list-item-content class="margen">
-                    <v-list-item-title class="pl-2 pb-2">
-                      <v-checkbox
-                        v-model="sistemaSeleccion"
-                        :label="`${item.texto}`"
-                        :value="item.value"
-                        hide-details
-                        dense
-                      ></v-checkbox>
-                    </v-list-item-title>
-                  </v-list-item-content>
+                  <v-list-item-title class="pl-0 pb-0">
+                    <v-checkbox
+                      v-model="sistemaSeleccion"
+                      :label="`${item.texto}`"
+                      :value="item.value"
+                      hide-details
+                      dense
+                    ></v-checkbox>
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-container>
@@ -53,17 +49,15 @@
             <v-container class="pt-0" fluid>
               <v-list>
                 <v-list-item v-for="item in pantalla" :key="item.texto">
-                  <v-list-item-content class="margen">
-                    <v-list-item-title class="pl-2 pb-2">
-                      <v-checkbox
-                        v-model="pantallaSeleccion"
-                        :label="`${item.texto}`"
-                        :value="item.value"
-                        hide-details
-                        dense
-                      ></v-checkbox>
-                    </v-list-item-title>
-                  </v-list-item-content>
+                  <v-list-item-title class="pl-2 pb-2">
+                    <v-checkbox
+                      v-model="pantallaSeleccion"
+                      :label="`${item.texto}`"
+                      :value="item.value"
+                      hide-details
+                      dense
+                    ></v-checkbox>
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-container>
@@ -77,6 +71,7 @@
               :max="max"
               :min="min"
               :height="10"
+              color="red accent-4"
               class="align-center"
               dense
             ></v-range-slider>
@@ -86,6 +81,8 @@
                   :value="range[0]"
                   label="Min"
                   outlined
+                  type="number"
+                  prepend-inner-icon="$"
                   dense
                   @change="$set(range, 0, $event)"
                 ></v-text-field>
@@ -98,6 +95,8 @@
                   :value="range[1]"
                   label="Max"
                   outlined
+                  type="number"
+                  prepend-inner-icon="$"
                   dense
                   @change="$set(range, 1, $event)"
                 ></v-text-field>
@@ -105,11 +104,153 @@
             </v-row>
             <!-- Fin Filtro Precio -->
           </v-card>
-
         </v-col>
+        <!--Fin de Filtros columna izquierda -->
+        <!-- Boton flotante filtro mobile -->
+        <v-dialog v-model="dialog" width="500">
+          <!--activador de filtros, es el boton flotante-->
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mb-8 red accent-4 elevation-0 white--text hidden-lg-and-up"
+              v-bind="attrs"
+              v-on="on"
+              fab
+              absolute
+              fixed
+              right
+              bottom
+            >
+              <v-icon>mdi-filter</v-icon>
+            </v-btn>
+          </template>
+          <!--Card de filtros mobile-->
+          <v-card>
+            <v-toolbar dark color="grey darken-3">
+              <v-btn icon dark @click="dialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-toolbar-title>Filtros:</v-toolbar-title>
+            </v-toolbar>
+            <v-card-text>
+              <!--Inicio filtros mobile-->
+              <v-switch
+                @click="filtro"
+                class="pl-5"
+                :label="`Nuevo`"
+              ></v-switch>
+              <v-card outlined>
+                <!-- Filtro Marca -->
+                <v-card-title class="pb-0">Marca</v-card-title>
+                <v-container class="pt-0" fluid>
+                  <v-list>
+                    <v-list-item v-for="item in marca" :key="item.texto">
+                      <v-list-item-title class="pl-0 pb-0">
+                        <v-checkbox
+                          v-model="marcaSeleccion"
+                          :label="`${item.texto}`"
+                          :value="item.value"
+                          hide-details
+                          dense
+                        ></v-checkbox>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-container>
+                <!-- Fin Filtro Marca -->
+                <v-divider></v-divider>
+                <!-- Filtro Sistema -->
+                <v-card-title class="pb-0">Sistema</v-card-title>
+                <v-container class="pt-0" fluid>
+                  <v-list>
+                    <v-list-item v-for="item in sistema" :key="item.texto">
+                      <v-list-item-title class="pl-0 pb-0">
+                        <v-checkbox
+                          v-model="sistemaSeleccion"
+                          :label="`${item.texto}`"
+                          :value="item.value"
+                          hide-details
+                          dense
+                        ></v-checkbox>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-container>
+                <!-- Fin Filtro Sistema -->
+                <v-divider></v-divider>
+                <!-- Filtro Sistema -->
+                <v-card-title class="pb-0">Pantalla</v-card-title>
+                <v-container class="pt-0" fluid>
+                  <v-list>
+                    <v-list-item v-for="item in pantalla" :key="item.texto">
+                      <v-list-item-title class="pl-2 pb-2">
+                        <v-checkbox
+                          v-model="pantallaSeleccion"
+                          :label="`${item.texto}`"
+                          :value="item.value"
+                          hide-details
+                          dense
+                        ></v-checkbox>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-container>
+                <!-- Fin Filtro Sistema -->
+                <!-- Filtro Precio -->
+                <v-divider></v-divider>
+                <v-card-title>Precio</v-card-title>
+                <v-range-slider
+                  @keyup.capture="precioFiltro"
+                  v-model="range"
+                  :max="max"
+                  :min="min"
+                  :height="10"
+                  color="red accent-4"
+                  class="align-center"
+                  dense
+                ></v-range-slider>
+                <v-row class="pa-2" dense>
+                  <v-col cols="12" sm="5">
+                    <v-text-field
+                      :value="range[0]"
+                      label="Min"
+                      outlined
+                      type="number"
+                      prepend-inner-icon="$"
+                      dense
+                      @change="$set(range, 0, $event)"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="2">
+                    <p class="pt-2 text-center">a</p>
+                  </v-col>
+                  <v-col cols="12" sm="5">
+                    <v-text-field
+                      :value="range[1]"
+                      label="Max"
+                      outlined
+                      type="number"
+                      prepend-inner-icon="$"
+                      dense
+                      @change="$set(range, 1, $event)"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <!-- Fin Filtro Precio -->
+              </v-card>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions class="grey darken-3">
+              <v-btn block small color="error" @click="dialog = false">
+                <v-icon left> mdi-close </v-icon>
+                Cerrar
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+          <!--Fin Card de filtros mobile-->
+        </v-dialog>
         <!--Filtros y cards derecha -->
         <v-col cols="12" lg="10">
-          <!-- Filtro ordenar -->              
+          <!--Filtros y cards -->
           <v-data-iterator
             loading="true"
             :items="filtros"
@@ -124,7 +265,7 @@
             <!-- Header con filtros-->
             <template v-slot:header>
               <v-row no-gutters class="mb-5">
-                <v-col cols="12" sm="8">
+                <v-col cols="4" sm="6" md="8">
                   <v-select
                     dense
                     v-model="sortBy"
@@ -137,8 +278,9 @@
                   ></v-select>
                 </v-col>
                 <v-col
-                  cols="4"
-                  sm="2"
+                  cols="6"
+                  sm="4"
+                  md="2"
                   class="d-flex align-center justify-center mt-2 mt-sm-0"
                 >
                   <v-btn-toggle v-model="sortDesc" mandatory>
@@ -151,7 +293,7 @@
                   </v-btn-toggle>
                 </v-col>
                 <v-col
-                  cols="3"
+                  cols="2"
                   sm="2"
                   class="d-flex align-center justify-center mt-2 mt-sm-0"
                 >
@@ -197,7 +339,7 @@
             <!-- Fin Filtro ordenar -->
             <v-divider></v-divider>
             <!-- crear cards -->
-            <template v-slot:default="props">              
+            <template v-slot:default="props">
               <v-row class="pt-5">
                 <v-col
                   v-for="anuncio in props.items"
@@ -293,11 +435,18 @@
                         class="text-decoration-none"
                       >
                         <v-btn class="ml-4" color="blue-grey" small dark>
-                          Ver producto <v-icon>mdi-plus</v-icon></v-btn
+                          Ver producto <v-icon>mdi-cellphone-information</v-icon></v-btn
                         >
                       </router-link>
                       <v-spacer></v-spacer>
-                      <v-btn class="mr-4" fab dark small color="red">
+                      <v-btn
+                        class="mr-4"
+                        fab
+                        dark
+                        small
+                        color="red"
+                        @click="agregarAlCarrito1(anuncio)"
+                      >
                         <v-icon dark>mdi-cart-plus</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -312,6 +461,7 @@
                 <v-col class="text-center pt-6">
                   <v-pagination
                     v-model="page"
+                    color="red accent-4"
                     :length="nPaginas"
                     :total-visible="7"
                   ></v-pagination>
@@ -329,22 +479,22 @@
 <script>
 import { db, st } from "../db.js";
 import moment from "moment";
-import { mapState } from "vuex";
+import { mapState, mapMutations} from "vuex";
 moment.locale("es");
 
 export default {
   name: "Home",
   components: {},
   props: {
-       busqueda: String
+    busqueda: String,
   },
   data() {
     return {
       itemsPerPageArray: [2, 4, 8, 12],
       itemsPerPage: 8,
       sortDesc: false,
-      anuncios:[],
-      loadingData: true,     
+      anuncios: [],
+      loadingData: true,
       dialog: false,
       loading: false,
       selection: 1,
@@ -355,19 +505,20 @@ export default {
       pantallaSeleccion: [],
       sortBy: "marca",
       keys: [
+        "Fecha",
+        "Precio",
         "Marca",
         "Descripcion",
         "Estado",
         "Marca",
         "Modelo",
         "Pantalla",
-        "Precio",
         "Ram",
         "Rom",
         "Sistema",
         "Telefono",
         "Titulo",
-        "Vendedor",        
+        "Vendedor",
       ],
       marca: [
         { texto: "Samsung", value: "samsung" },
@@ -396,30 +547,51 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["agregarAlCarrito1"]),    
     async obtenerAnuncios() {
-      var fr = await db.collection("anuncios").get();
-      fr.forEach((anunciosData) => {
-        var anuncio = {
-          id: anunciosData.id,
-          descripcion: anunciosData.data().descripcion,
-          titulo: anunciosData.data().titulo,
-          marca: anunciosData.data().marca,
-          precio: anunciosData.data().precio,
-          imagen: null,
-          rom: anunciosData.data().rom,
-          ram: anunciosData.data().ram,
-          estado: anunciosData.data().estado,
-          sistema: anunciosData.data().sistema,
-          vendedor: anunciosData.data().vendedor,
-          telefono: anunciosData.data().telefono,
-          pantalla: anunciosData.data().pantalla,
-          version: anunciosData.data().version,
-          fecha: anunciosData.data().fecha,
-        };
-        this.anuncios.push(anuncio);
-      });
-      this.loadingData = false;
-      await this.traerImagenes();      
+      var anunciosLocal = [];
+      await db
+        .collection("anuncios")
+        .get()
+        .then((r) => {
+          var cantidadAnuncios = r.size;
+          var contador = 0;
+          r.forEach(async (anuncio) => {
+            let anuncioData = anuncio.data();
+            await st
+              .ref()
+              .child(anuncio.id + "-img/")
+              .list({ maxResults: 1 })
+              .then(async (img) => {
+                await st
+                  .ref()
+                  .child(anuncio.id + "-img/" + img.items[0].name)
+                  .getDownloadURL()
+                  .then((url) => {
+                    contador = contador + 1;
+                    anuncioData.imagen = url;
+                  })
+                  .catch((eUrl) => {
+                    console.log(eUrl);
+                  });
+              })
+              .catch((eImg) => {
+                contador = contador + 1;
+                anuncioData.imagen =
+                  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/480px-No_image_available.svg.png";
+                console.log(eImg);
+              });
+            if (contador == cantidadAnuncios) {
+              this.loadingData = false;
+            }
+            anuncioData.id = anuncio.id;
+            anunciosLocal.push(anuncioData);
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.anuncios = anunciosLocal;
     },
     async filtro() {
       this.estadoActivo = !this.estadoActivo;
@@ -486,9 +658,9 @@ export default {
     await this.obtenerAnuncios();
   },
   computed: {
-    filtros: function () { 
-       // var anunciosFiltrar = this.anuncios;     
-        return this.anuncios.filter(function (filtro) {
+    ...mapState(["nuevo"]),
+    filtros: function () {
+      return this.anuncios.filter(function (filtro) {
         if (
           this.marcaSeleccion.length > 0 ||
           this.pantallaSeleccion.length > 0 ||
@@ -547,8 +719,7 @@ export default {
               (filtro.precio <= this.range[1]))
           );
         }
-      }, this); 
-        
+      }, this);
     },
     paginarProductos: function () {
       let copia = this.filtros.slice();
@@ -591,10 +762,15 @@ export default {
       } else {
         return Math.ceil(this.cantidadmax / this.itemsPerPage);
       }
-    },
-    ...mapState(["agrego"]),
+    },    
     numberOfPages() {
       return Math.ceil(this.anuncios.length / this.itemsPerPage);
+    },
+  },
+  watch: {
+    nuevo: function() {
+      this.loadingData = true;
+      this.obtenerAnuncios();
     },
   },
 };
